@@ -16,94 +16,92 @@
     limitations under the License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <artifactId>maven-plugins</artifactId>
-    <groupId>org.apache.maven.plugins</groupId>
-    <version>18</version>
+    <groupId>org.sonatype.oss</groupId>
+    <artifactId>oss-parent</artifactId>
+    <version>7</version>
   </parent>
 
-  <artifactId>maven-swig-plugin</artifactId>
-  <version>1.3.40-1-SNAPSHOT</version>
+  <groupId>net.alchim31.maven</groupId>
+  <artifactId>swig-maven-plugin</artifactId>
+  <version>1.4.0-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>Maven SWIG Plugin</name>
-  <description>
-    Plugin for Maven to run SWIG
-  </description>
+  <description>Plugin for Maven to run SWIG</description>
   <url>http://duns.github.com/maven-swig-plugin/</url>
 
-  <distributionManagement>
-    <repository>
-      <id>duns-maven-releases</id>
-      <name>Duns' Maven Releases</name>
-      <url>file:///Users/duns/sonatype/git/maven-releases</url>
-    </repository>
-    <snapshotRepository>
-      <id>duns-maven-snapshots</id>
-      <name>Duns' Maven Snapshots</name>
-      <url>file:///Users/duns/sonatype/git/maven-snapshots</url>
-    </snapshotRepository>
-  <!-- temporarily until we have a fixed site -->
-    <site>
-      <id>local</id>
-      <url>file:///Users/duns/sonatype/git/maven-swig-plugin-site</url>
-    </site>
-  </distributionManagement>
-
   <prerequisites>
-    <maven>2.0.9</maven>
+    <maven>${mavenVersion}</maven>
   </prerequisites>
 
   <scm>
-    <connection>scm:git:git://github.com/duns/maven-swig-plugin.git</connection>
-    <developerConnection>scm:git:git://github.com/duns/maven-swig-plugin.git</developerConnection>
-    <url>http://github.com/duns/maven-swig-plugin</url>
+    <connection>scm:git:git://github.com/davidB/${project.artifactId}.git</connection>
+    <developerConnection>scm:git:git@github.com:davidB/${project.artifactId}.git</developerConnection>
+    <url>http://github.com/davidB/${project.artifactId}/</url>
   </scm>
   <issueManagement>
-    <system>jira</system>
-    <url>http://issues.sonatype.org/browse/NAR</url>
+    <system>github</system>
+    <url>http://github.com/davidB/${project.artifactId}/issues#issue/</url>
   </issueManagement>
 
   <properties>
-    <mavenVersion>2.0.9</mavenVersion>
+    <mavenVersion>3.0</mavenVersion>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+    <encoding>UTF-8</encoding>
+    <project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-project</artifactId>
+      <artifactId>maven-core</artifactId>
       <version>${mavenVersion}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-plugin-api</artifactId>
       <version>${mavenVersion}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-artifact</artifactId>
-      <version>${mavenVersion}</version>
+      <version>2.2.1</version>
+      <scope>provided</scope>
     </dependency>
-
+    <!-- dependency for plexus annotation -->
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-annotations</artifactId>
+      <version>1.5.5</version>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
-      <version>1.4.1</version>
+      <version>3.0</version>
     </dependency>
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-archiver</artifactId>
-      <version>1.0-alpha-11</version>
+      <version>2.2</version>
       <exclusions>
-        <exclusion>  
-          <groupId>org.codehaus.plexus</groupId> 
+        <exclusion>
+          <groupId>org.codehaus.plexus</groupId>
           <artifactId>plexus-component-api</artifactId>
         </exclusion>
-      </exclusions> 
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -114,12 +112,26 @@
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-compiler-api</artifactId>
-      <version>1.5.3</version>
+      <version>2.1</version>
     </dependency>
   </dependencies>
 
   <build>
     <defaultGoal>install</defaultGoal>
+    <plugins>
+    <plugin>
+      <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-component-metadata</artifactId>
+      <version>1.5.5</version>
+      <executions>
+        <execution>
+          <goals>
+            <goal>generate-metadata</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+    </plugins>
   </build>
 
   <reporting>
@@ -135,12 +147,12 @@
         <version>2.2</version>
       </plugin>
     </plugins>
-  </reporting>  
+  </reporting>
 
   <profiles>
     <profile>
       <id>check</id>
-    
+
       <build>
         <plugins>
           <plugin>
@@ -173,9 +185,9 @@
             <version>1.5</version>
             <configuration>
               <debug>false</debug>
-   	      <ignoreFailures>false</ignoreFailures>
+              <ignoreFailures>false</ignoreFailures>
               <pomIncludes>
-              	<pomInclude>*/pom.xml</pomInclude>
+                <pomInclude>*/pom.xml</pomInclude>
               </pomIncludes>
               <pomExcludes>
                 <pomExclude>it-parent/**</pomExclude>
@@ -201,4 +213,18 @@
       </build>
     </profile>
   </profiles>
+  <repositories>
+    <repository>
+      <id>duns.github.com</id>
+      <name>duns.github.com</name>
+      <url>http://duns.github.com/maven-snapshots/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>duns.github.com</id>
+      <name>duns.github.com</name>
+      <url>http://duns.github.com/maven-snapshots/</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>
