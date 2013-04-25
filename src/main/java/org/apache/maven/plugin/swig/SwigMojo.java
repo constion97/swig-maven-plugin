@@ -366,7 +366,7 @@ public class SwigMojo extends AbstractMojo
 
         os = NarUtil.getOS( os );
 
-        Linker linker = new Linker( NarUtil.getLinkerName( architecture, os, null ) );
+        Linker linker = new Linker( NarUtil.getLinkerName( project, architecture, os, null ) );
         narManager = new NarManager( getLog(), localRepository, project, architecture, os, linker );
 
         targetDirectory = new File( targetDirectory, cpp ? "c++" : "c" );
@@ -417,7 +417,7 @@ public class SwigMojo extends AbstractMojo
             if ( version == null )
             {
                 Plugin swigPlugin =
-                    (Plugin) project.getBuild().getPluginsAsMap().get( "org.apache.maven.plugins:maven-swig-plugin" );
+                    (Plugin) project.getBuild().getPluginsAsMap().get(  "net.alchim31.maven:swig-maven-plugin" );
                 version = swigPlugin.getVersion();
             }
             Artifact swigJar = artifactFactory.createArtifactWithClassifier(
@@ -457,7 +457,7 @@ public class SwigMojo extends AbstractMojo
             swigJavaInclude = new File( swigInclude, "java" );
             swig =
                 new File( narLayout.getBinDirectory( unpackDirectory, swigJar.getArtifactId(), swigJar.getVersion(),
-                                                     NarUtil.getAOL( architecture, os, linker, null ).toString() ),
+                                                     NarUtil.getAOL( project, architecture, os, linker, null ).toString() ),
                           "swig" );
         }
         else
@@ -520,7 +520,7 @@ public class SwigMojo extends AbstractMojo
         throws MojoExecutionException, MojoFailureException
     {
         // configure NAR plugin
-        Plugin narPlugin = project.getBuild().getPluginsAsMap().get( "org.apache.maven.plugins:maven-nar-plugin" );
+        Plugin narPlugin = project.getBuild().getPluginsAsMap().get( "org.codeswarm:maven-nar-plugin" );
         if ( narPlugin == null )
         {
             return;
