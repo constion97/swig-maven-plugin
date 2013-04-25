@@ -27,7 +27,7 @@
 
   <groupId>net.alchim31.maven</groupId>
   <artifactId>swig-maven-plugin</artifactId>
-  <version>1.4.0-SNAPSHOT</version>
+  <version>1.4.1-SNAPSHOT</version>
   <packaging>maven-plugin</packaging>
   <name>Maven SWIG Plugin</name>
   <description>Plugin for Maven to run SWIG</description>
